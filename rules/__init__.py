@@ -5,10 +5,9 @@ from .implementations import (
 )
 
 __all__ = [
-    "game_bot_forwarded", 
+    "game_bot_forwarded",
     "empty_profle",
     "is_user_admin",
-
 ]
 game_bot_forwarded = GameBotForwarded()
 empty_profle = EmptyProfle()

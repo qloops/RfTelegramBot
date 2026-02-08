@@ -4,6 +4,6 @@ from . import (
 )
 
 __all__ = [
-    "markup_keyboards", 
+    "markup_keyboards",
     "markup_buttons",
 ]

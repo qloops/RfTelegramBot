@@ -1,7 +1,7 @@
 from .base_repository import BaseRepository
 from .utils import create_new_user
 from .database import (
-    MongoDBInterface, 
+    MongoDBInterface,
     db_interface,
 )
 from .models import (

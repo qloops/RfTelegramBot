@@ -1,14 +1,14 @@
 import re
 from typing import Union
 from datetime import (
-    datetime, 
-    timedelta, 
+    datetime,
+    timedelta,
     timezone,
 )
 
 from pyrogram.types import Message
 from pyrogram import (
-    Client, 
+    Client,
     filters,
 )
 
@@ -17,13 +17,9 @@ from bot import bot
 from views.formatters import UserProfileFormatter
 from constants.messages import BotMessages
 from constants.patterns import PROFILE_MAIN_VALIDATOR
-from database import (
-    db_interface, 
-    models,
-    utils
-)
+from database import db_interface, models, utils
 from utils import (
-    ProfileParser, 
+    ProfileParser,
     convert_to_utc,
 )
 
@@ -36,16 +32,13 @@ async def _validate_profile(
 ) -> Union[str, bool]:
     time_limit = timedelta(seconds=UPDATE_TIME_LIMIT)
     user_id = message.from_user.id
-    
-    if (
-        datetime.now(timezone.utc) 
-        - parsed_profile.updated_at > time_limit
-    ):
+
+    if datetime.now(timezone.utc) - parsed_profile.updated_at > time_limit:
         return BotMessages.PROFILE_EXPIRED
 
     if parsed_profile.user_id != user_id:
         return BotMessages.NOT_YOUR_PROFILE
-    
+
     return False
 
 
@@ -61,27 +54,19 @@ async def profile_handler(client: Client, message: Message):
 
     utils.create_new_user.create_new_user(user_id=user_id)
 
-    if error_msg  := (await _validate_profile(message, game_profile)):
+    if error_msg := (await _validate_profile(message, game_profile)):
         await message.reply(text=error_msg)
         return
 
-    old_profile = db_interface.users_profiles.find_one(
-        {"user_id": user_id}
-    )
+    old_profile = db_interface.users_profiles.find_one({"user_id": user_id})
 
     if old_profile:
-        db_interface.users_profiles.update_one(
-            {"user_id": user_id}, 
-            game_profile
-        )
+        db_interface.users_profiles.update_one({"user_id": user_id}, game_profile)
     else:
-        db_interface.users_profiles.insert_one(
-            record=game_profile
-        )
+        db_interface.users_profiles.insert_one(record=game_profile)
 
     response_text = UserProfileFormatter.format(
-        profile=game_profile,
-        old_profile=old_profile
+        profile=game_profile, old_profile=old_profile
     )
-    
+
     await message.reply(text=response_text)

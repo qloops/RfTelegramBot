@@ -1,6 +1,6 @@
 from .roles import UserAccessRoles
 from . import (
-    patterns, 
+    patterns,
     messages,
 )
 

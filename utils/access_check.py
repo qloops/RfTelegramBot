@@ -2,10 +2,7 @@ import database
 import constants
 
 
-def access_check(
-        user: database.models.User,
-        role: constants.UserAccessRoles
-) -> bool:
+def access_check(user: database.models.User, role: constants.UserAccessRoles) -> bool:
     """
     Checks if the user has access based on their role.
 
@@ -18,6 +15,6 @@ def access_check(
     Returns:
         bool: True if the user has enough access, False otherwise.
     """
-    # I don't know what the fuck is going on here, 
+    # I don't know what the fuck is going on here,
     # then I'll figure it out.
     return user.access_level >= role

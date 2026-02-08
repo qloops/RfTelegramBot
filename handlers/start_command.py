@@ -1,7 +1,7 @@
 from pyrogram.types import Message
 from pyrogram.enums import ChatType
 from pyrogram import (
-    Client, 
+    Client,
     filters,
 )
 
@@ -18,8 +18,7 @@ async def start_command(client: Client, message: Message):
 
     if message.chat.type == ChatType.PRIVATE:
         await message.reply(
-            text=BotMessages.WELCOME,
-            reply_markup=markup_keyboards.MENU_KEYBOARD
+            text=BotMessages.WELCOME, reply_markup=markup_keyboards.MENU_KEYBOARD
         )
     else:
         await message.reply(text=BotMessages.WELCOME)

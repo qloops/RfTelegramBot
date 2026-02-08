@@ -11,10 +11,7 @@ f_level_str = os.getenv("FILE_LOG_LEVEL", "INFO").upper()
 CONSOLE_LOG_LEVEL = getattr(logging, c_level_str, logging.ERROR)
 FILE_LOG_LEVEL = getattr(logging, f_level_str, logging.INFO)
 
-logs.configure_logging(
-    console_level=CONSOLE_LOG_LEVEL,
-    file_level=FILE_LOG_LEVEL
-)
+logs.configure_logging(console_level=CONSOLE_LOG_LEVEL, file_level=FILE_LOG_LEVEL)
 
 logger = logging.getLogger(__name__)
 

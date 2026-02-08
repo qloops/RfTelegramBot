@@ -1,5 +1,0 @@
-git+https://github.com/qloops/pyrogram.git
-tgcrypto
-python-dotenv
-pymongo
-tzlocal

@@ -1,10 +1,10 @@
 import logging
 from dataclasses import asdict
 from typing import (
-    Optional, 
-    List, 
-    Any, 
-    Dict, 
+    Optional,
+    List,
+    Any,
+    Dict,
     Tuple,
 )
 
@@ -12,13 +12,13 @@ from bson import ObjectId
 from pymongo import MongoClient
 from pymongo.database import Database
 from pymongo.collection import Collection
-from pymongo.cursor import Cursor 
+from pymongo.cursor import Cursor
 from pymongo.errors import ConnectionFailure
 from pymongo.results import UpdateResult
 
 import config
 from .repositories import (
-    UserRepository, 
+    UserRepository,
     UserProfileRepository,
     MediaCacheRepository,
 )
@@ -29,28 +29,25 @@ logger = logging.getLogger(__name__)
 class MongoDBInterface:
     """
     Interface for MongoDB database operations.
-    
+
     Provides low-level database operations and manages repository instances
         for different collections.
     """
 
     _client: MongoClient
     _db: Database
- 
+
     # Repositories
     users: UserRepository
     users_profiles: UserProfileRepository
     media_cache: MediaCacheRepository
 
     def __init__(
-            self, 
-            db_name: str, 
-            host: str = "localhost",
-            port: int = 27017
+        self, db_name: str, host: str = "localhost", port: int = 27017
     ) -> None:
         """
         Initialize MongoDB connection and repositories.
-        
+
         Args:
             db_name: Name of the database to connect to.
             host: MongoDB server host.
@@ -62,10 +59,7 @@ class MongoDBInterface:
         """
         try:
             self._client = MongoClient(
-                host=host, 
-                port=port, 
-                serverSelectionTimeoutMS=5000,
-                tz_aware=True
+                host=host, port=port, serverSelectionTimeoutMS=5000, tz_aware=True
             )
             self._db = self._client[db_name]
             self._db.command(command="ping")
@@ -87,7 +81,7 @@ class MongoDBInterface:
             raise Exception(
                 f"An unexpected error occurred during MongoDB connection: {e}"
             )
-    
+
     def _init_repositories(self) -> None:
         """Initialize repository instances."""
         self.users = UserRepository(self)
@@ -97,10 +91,10 @@ class MongoDBInterface:
     def _get_collection(self, collection_name: str) -> Collection:
         """
         Get a collection by name.
-        
+
         Args:
             collection_name: Name of the collection.
-            
+
         Returns:
             Collection: MongoDB collection instance.
         """
@@ -109,11 +103,11 @@ class MongoDBInterface:
     def _insert_one(self, collection_name: str, record: Any) -> ObjectId:
         """
         Insert a single document into a collection.
-        
+
         Args:
             collection_name: Name of the collection.
             record: Dataclass instance to insert.
-            
+
         Returns:
             ObjectId: ID of the inserted document.
         """
@@ -122,18 +116,14 @@ class MongoDBInterface:
         result = collection.insert_one(document_to_insert)
         return result.inserted_id
 
-    def _insert_many(
-            self, 
-            collection_name: str, 
-            records: List[Any]
-        ) -> List[ObjectId]:
+    def _insert_many(self, collection_name: str, records: List[Any]) -> List[ObjectId]:
         """
         Insert multiple documents into a collection.
-        
+
         Args:
             collection_name: Name of the collection.
             records: List of dataclass instances to insert.
-            
+
         Returns:
             List[ObjectId]: List of IDs of inserted documents.
         """
@@ -143,19 +133,19 @@ class MongoDBInterface:
         return result.inserted_ids
 
     def _update_one(
-        self, 
-        collection_name: str, 
-        condition: Dict[str, Any], 
-        update_operations: Dict[str, Any]
+        self,
+        collection_name: str,
+        condition: Dict[str, Any],
+        update_operations: Dict[str, Any],
     ) -> UpdateResult:
         """
         Update a single document in a collection.
-        
+
         Args:
             collection_name: Name of the collection.
             condition: Query condition to find the document.
             update_operations: MongoDB update operations.
-            
+
         Returns:
             UpdateResult: Result of the update operation.
         """
@@ -166,16 +156,16 @@ class MongoDBInterface:
         self,
         collection_name: str,
         condition: Dict[str, Any],
-        update_operations: Dict[str, Any]
+        update_operations: Dict[str, Any],
     ) -> UpdateResult:
         """
         Update multiple documents in a collection.
-        
+
         Args:
             collection_name: Name of the collection.
             condition: Query condition to find documents.
             update_operations: MongoDB update operations.
-            
+
         Returns:
             UpdateResult: Result of the update operation.
         """
@@ -186,16 +176,16 @@ class MongoDBInterface:
         self,
         collection_name: str,
         condition: Dict[str, Any],
-        projection: Optional[Dict[str, Any]] = None
+        projection: Optional[Dict[str, Any]] = None,
     ) -> Optional[Dict[str, Any]]:
         """
         Find a single document in a collection.
-        
+
         Args:
             collection_name: Name of the collection.
             condition: Query condition.
             projection: Fields to include/exclude in the result.
-            
+
         Returns:
             Optional[Dict[str, Any]]: Found document or None.
         """
@@ -207,13 +197,13 @@ class MongoDBInterface:
         collection_name: str,
         condition: Dict[str, Any],
         projection: Optional[Dict[str, Any]] = None,
-        limit: int = 0, 
+        limit: int = 0,
         skip: int = 0,
-        sort: Optional[List[Tuple[str, int]]] = None
+        sort: Optional[List[Tuple[str, int]]] = None,
     ) -> List[Dict[str, Any]]:
         """
         Find multiple documents in a collection.
-        
+
         Args:
             collection_name: Name of the collection.
             condition: Query condition.
@@ -221,16 +211,13 @@ class MongoDBInterface:
             limit: Maximum number of documents to return (0 for no limit).
             skip: Number of documents to skip.
             sort: List of (field, direction) tuples for sorting.
-            
+
         Returns:
             List[Dict[str, Any]]: List of found documents.
         """
         collection = self._get_collection(collection_name)
-        cursor: Cursor = collection.find(
-            filter=condition, 
-            projection=projection
-        )
-        
+        cursor: Cursor = collection.find(filter=condition, projection=projection)
+
         if sort:
             cursor = cursor.sort(sort)
         if skip > 0:
@@ -239,19 +226,15 @@ class MongoDBInterface:
             cursor = cursor.limit(limit)
 
         return list(cursor)
-    
-    def _get_distinct_values(
-            self, 
-            collection_name: str, 
-            field_name: str
-    ) -> List[Any]:
+
+    def _get_distinct_values(self, collection_name: str, field_name: str) -> List[Any]:
         """
         Get distinct values for a field in a collection.
-        
+
         Args:
             collection_name: Name of the collection.
             field_name: Name of the field.
-            
+
         Returns:
             List[Any]: List of distinct values.
         """
@@ -262,7 +245,7 @@ class MongoDBInterface:
 class _LazyDBInterface:
     """
     Lazy wrapper for MongoDBInterface that creates connection on first access.
-    
+
     This class delays the database connection until it's actually needed,
         preventing connection at import time.
     """
@@ -274,11 +257,11 @@ class _LazyDBInterface:
 
     def __init__(self):
         self._db: Optional[MongoDBInterface] = None
-    
+
     def _ensure_connected(self) -> None:
         """
         Create database connection if not already connected.
-        
+
         Raises:
             ValueError: If environment variables contain invalid values.
             ConnectionFailure: If connection to MongoDB fails.
@@ -298,10 +281,10 @@ class _LazyDBInterface:
     def __getattr__(self, name: str) -> Any:
         """
         Delegate attribute access to the actual MongoDBInterface instance.
-        
+
         Args:
             name: Attribute name to access.
-            
+
         Returns:
             Any: Attribute value from the MongoDBInterface instance.
         """

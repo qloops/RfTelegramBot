@@ -1,0 +1,23 @@
+[project]
+name = "rf-telegram-bot"
+version = "0.0.1"
+dependencies = [
+    "pyrogram @ git+https://github.com/qloops/pyrogram.git",
+    "tgcrypto",
+    "python-dotenv",
+    "pymongo",
+    "tzlocal",
+]
+
+[project.optional-dependencies]
+dev = [
+    "black",
+] 
+
+[tool.black]
+line-length = 88
+target-version = ['py311',]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["*"]

@@ -9,9 +9,8 @@ from constants.patterns import RACE_SYMBOL
 class UserProfileFormatter:
     @staticmethod
     def format(
-        profile: models.UserProfile,
-        old_profile: Optional[models.UserProfile] = None
-    ) -> str:        
+        profile: models.UserProfile, old_profile: Optional[models.UserProfile] = None
+    ) -> str:
         race = re.search(RACE_SYMBOL, profile.race).group("race_symbol")
         lines = [
             f"{race} [{profile.guild_name}]{profile.nickname}",
@@ -24,7 +23,7 @@ class UserProfileFormatter:
             (
                 f"💨 : {profile.dodge}%  <b>•</b>  🎯: {profile.crit}%"
                 f"  <b>•</b>  ⏳: {profile.crit}%"
-            )
+            ),
         ]
 
         if old_profile:
@@ -54,5 +53,5 @@ class UserProfileFormatter:
             parts.append(f"{minutes}мин.")
         if seconds > 0 or not parts:
             parts.append(f"{seconds}сек.")
-            
+
         return " ".join(parts)
