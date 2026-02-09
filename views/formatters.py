@@ -33,7 +33,7 @@ class UserProfileFormatter:
 
             duration_str = UserProfileFormatter._format_duration(time_diff)
 
-            diff_line = f"\n+{exp_diff:,}🌕 +{adena_diff:,}🏵  {duration_str}"
+            diff_line = f"\n{exp_diff:,}🌕 {adena_diff:,}🏵 {duration_str}"
             lines.append(diff_line)
 
         return "\n".join(lines)

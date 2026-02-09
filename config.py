@@ -37,7 +37,7 @@ except ValueError:
     logger.error(f"The BOT_GAME_ID must be a valid integer, got: {raw_game_id}.")
     raise ValueError(f"Invalid BOT_GAME_ID format")
 
-DB_NAME = os.getenv("DB_NAME", "Name")
+DB_NAME = os.getenv("DB_NAME", "rf_bot_db")
 DB_HOST = os.getenv("DB_HOST", "localhost")
 
 try:

@@ -17,7 +17,11 @@ from bot import bot
 from views.formatters import UserProfileFormatter
 from constants.messages import BotMessages
 from constants.patterns import PROFILE_MAIN_VALIDATOR
-from database import db_interface, models, utils
+from database import (
+    db_interface, 
+    models, 
+    utils,
+)
 from utils import (
     ProfileParser,
     convert_to_utc,

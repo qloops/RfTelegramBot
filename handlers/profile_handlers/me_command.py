@@ -14,7 +14,7 @@ from constants.messages import BotMessages
 @bot.on_message(
     filters.regex(f"^{markup_buttons.PROFILE_BUTTON}$") | filters.command("me")
 )
-async def profile_command(client: Client, message: Message):
+async def me_command(client: Client, message: Message):
     user_id = message.from_user.id
     user_profile = db_interface.users_profiles.find_one(condition={"user_id": user_id})
 
