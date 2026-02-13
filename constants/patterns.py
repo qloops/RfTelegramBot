@@ -1,6 +1,8 @@
 from enum import StrEnum
 
 PROFILE_MAIN_VALIDATOR = r"^Раса:.+#нет_войне.$"
+RACE_SYMBOL = r"(?P<race_symbol>.+)(Basilaris|Aquilla|Castitas)"
+ENERGY_MAIN_VALIDATOR = r"^\+1\sк\sэнергии\s🔋(?P<energy>\d+)/\d+$"
 
 
 class CommonPatterns(StrEnum):
@@ -29,6 +31,3 @@ class StatsPatterns(StrEnum):
 class ResourcePatterns(StrEnum):
     CHARACTER_EXP = r"🌕Опыт:\s(?P<character_exp>[\d\s]+)"
     ADENA = r"🏵Аден:\s(?P<adena>[\d\s]+)"
-
-
-RACE_SYMBOL = r"(?P<race_symbol>.+)(Basilaris|Aquilla|Castitas)"

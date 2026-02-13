@@ -1,6 +1,10 @@
 import re
 from typing import Optional
-from datetime import timedelta
+from datetime import (
+    timedelta,
+    datetime,
+    timezone,
+)
 
 from database import models
 from constants.patterns import RACE_SYMBOL
@@ -55,3 +59,39 @@ class UserProfileFormatter:
             parts.append(f"{seconds}сек.")
 
         return " ".join(parts)
+
+
+class EnergyFormatter:
+    @staticmethod
+    def format(energy: int, forward_date: datetime) -> str:
+        now = datetime.now(timezone.utc)
+        if forward_date.tzinfo is None:
+            forward_date = forward_date.replace(tzinfo=timezone.utc)
+
+        passed_seconds = (now - forward_date).total_seconds()
+        regen_period = 25 * 60
+
+        recovered_since_then = int(passed_seconds // regen_period)
+        current_energy = energy + recovered_since_then
+
+        if current_energy >= 10:
+            return "Ты полный."
+
+        seconds_until_next = regen_period - (passed_seconds % regen_period)
+        lines = []
+
+        for i in range(1, 6):
+            target_energy = current_energy + i
+
+            if target_energy > 10:
+                break
+
+            wait_sec = seconds_until_next + (i - 1) * regen_period
+            wait_min = int(wait_sec // 60)
+
+            event_time = now + timedelta(seconds=wait_sec)
+            time_str = event_time.strftime("%H:%M:%S")
+
+            lines.append(f"+{i}({target_energy})🔋 в {time_str} ({wait_min} мин.)")
+
+        return "\n".join(lines)

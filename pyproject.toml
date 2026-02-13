@@ -1,6 +1,6 @@
 [project]
 name = "rf-telegram-bot"
-version = "0.0.3"
+version = "0.0.4"
 dependencies = [
     "pyrogram @ git+https://github.com/qloops/pyrogram.git",
     "tgcrypto",

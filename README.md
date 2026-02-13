@@ -40,16 +40,6 @@ source venv/bin/activate
 This project uses `pyproject.toml`. Choose the installation mode that fits your needs:
 
 **Option A: Development Mode (Recommended)**
-Use this if you are developing or testing. The project is installed in "editable" mode, so changes to the code are reflected immediately without reinstalling.
-
-```bash
-pip install -e .
-```
-
-### 3. Install Dependencies
-This project uses `pyproject.toml`. Choose the installation mode that fits your needs:
-
-**Option A: Development Mode (Recommended)**
 Installs the project in "editable" mode along with development tools (like Black).
 
 ```bash
@@ -69,7 +59,8 @@ pip install .
     ```bash
     # Windows (CMD)
     copy .env.example .env
-
+    ```
+    ```bash
     # Linux/macOS
     cp .env.example .env
     ```
